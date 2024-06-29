@@ -37,10 +37,10 @@ func (ctrl *addressController) CreateAddress(c *fiber.Ctx) error {
 
 	response, err := ctrl.service.CreateAddress(createAddressRequest)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(utils.BuildResponseFailed("Failed to create new address", err.Error(), nil))
+		return c.Status(fiber.StatusInternalServerError).JSON(utils.BuildResponseFailed(dto.MESSAGE_FAILED_CREATE_ADDRESS, err.Error(), nil))
 	}
 
-	return c.JSON(utils.BuildResponseSuccess("Success to create new address", response))
+	return c.JSON(utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_ADDRESS, response))
 }
 
 func (ctrl *addressController) UpdateAddress(c *fiber.Ctx) error {
@@ -57,18 +57,18 @@ func (ctrl *addressController) UpdateAddress(c *fiber.Ctx) error {
 	addressID := c.Params("id")
 	response, err := ctrl.service.UpdateAddress(addressID, updateAddressRequest)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(utils.BuildResponseFailed("Failed to update address", err.Error(), nil))
+		return c.Status(fiber.StatusInternalServerError).JSON(utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_ADDRESS, err.Error(), nil))
 	}
 
-	return c.JSON(utils.BuildResponseSuccess("Success to update address", response))
+	return c.JSON(utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_ADDRESS, response))
 }
 
 func (ctrl *addressController) ReadAddress(c *fiber.Ctx) error {
 	addressID := c.Params("id")
 	response, err := ctrl.service.ReadAddress(addressID)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(utils.BuildResponseFailed("Failed to read address", err.Error(), nil))
+		return c.Status(fiber.StatusInternalServerError).JSON(utils.BuildResponseFailed(dto.MESSAGE_FAILED_READ_ADDRESS, err.Error(), nil))
 	}
 
-	return c.JSON(utils.BuildResponseSuccess("Success to read address", response))
+	return c.JSON(utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_READ_ADDRESS, response))
 }
