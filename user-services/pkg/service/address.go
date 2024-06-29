@@ -35,7 +35,7 @@ func (s *addressService) CreateAddress(request dto.CreateAddressRequest) (*dto.C
 		Province:      request.Address.Province,
 		Country:       request.Address.Country,
 		PostalCode:    request.Address.PostalCode,
-		IsDefault:     request.Address.IsDefault,
+		IsDefault:     false, // Default
 	}
 
 	addressEntityPtr, err := s.addressRepo.CreateAddress(addressEntity)

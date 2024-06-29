@@ -10,34 +10,53 @@ import (
 )
 
 type UserService interface {
-	Register(user dto.UserRequest) (*dto.RegisterResponse, error)
+	Register(user dto.RegisterRequest) (*dto.RegisterResponse, error)
 	Login(username, password string) (*dto.LoginResponse, error)
 }
 
 type userService struct {
-	userRepo repository.UserRepository
+	userRepo    repository.UserRepository
+	addressRepo repository.AddressRepository
 }
 
-func NewUserService(userRepo repository.UserRepository) UserService {
+func NewUserService(userRepo repository.UserRepository, addressRepo repository.AddressRepository) UserService {
 	return &userService{
-		userRepo: userRepo,
+		userRepo:    userRepo,
+		addressRepo: addressRepo,
 	}
 }
 
-func (s *userService) Register(user dto.UserRequest) (*dto.RegisterResponse, error) {
-	hashedPassword := utils.HashPassword(user.Password)
+func (s *userService) Register(user dto.RegisterRequest) (*dto.RegisterResponse, error) {
+	hashedPassword := utils.HashPassword(user.User.Password)
 
 	userEntity := entity.User{
-		Username:       user.Username,
+		Username:       user.User.Username,
 		HashedPassword: hashedPassword,
-		Email:          user.Email,
-		FirstName:      user.FirstName,
-		LastName:       user.LastName,
-		PhoneNumber:    user.PhoneNumber,
-		Role:           user.Role,
+		Email:          user.User.Email,
+		FirstName:      user.User.FirstName,
+		LastName:       user.User.LastName,
+		PhoneNumber:    user.User.PhoneNumber,
+		Role:           user.User.Role,
 	}
 
 	createUserResult, err := s.userRepo.CreateUser(userEntity)
+	if err != nil {
+		return nil, err
+	}
+
+	addressEntity := entity.Address{
+		UserID:        createUserResult.ID,
+		Street:        user.Address.Street,
+		SubDistrict:   user.Address.SubDistrict,
+		District:      user.Address.District,
+		CityOrRegency: user.Address.CityOrRegency,
+		Province:      user.Address.Province,
+		Country:       user.Address.Country,
+		PostalCode:    user.Address.PostalCode,
+		IsDefault:     false,
+	}
+
+	createAddressResult, err := s.addressRepo.CreateAddress(addressEntity)
 	if err != nil {
 		return nil, err
 	}
@@ -54,8 +73,24 @@ func (s *userService) Register(user dto.UserRequest) (*dto.RegisterResponse, err
 		UpdatedAt:   createUserResult.UpdatedAt,
 	}
 
+	addressResponse := dto.AddressResponse{
+		ID:            createAddressResult.ID,
+		UserID:        createAddressResult.UserID,
+		Street:        createAddressResult.Street,
+		SubDistrict:   createAddressResult.SubDistrict,
+		District:      createAddressResult.District,
+		CityOrRegency: createAddressResult.CityOrRegency,
+		Province:      createAddressResult.Province,
+		Country:       createAddressResult.Country,
+		PostalCode:    createAddressResult.PostalCode,
+		IsDefault:     createAddressResult.IsDefault,
+		CreatedAt:     createAddressResult.CreatedAt,
+		UpdatedAt:     createAddressResult.UpdatedAt,
+	}
+
 	return &dto.RegisterResponse{
-		User: userResponse,
+		User:    userResponse,
+		Address: addressResponse,
 	}, nil
 }
 

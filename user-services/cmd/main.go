@@ -28,7 +28,7 @@ func main() {
 	addressRepository := repository.NewAddressRepository(dbConfig.SQLDB)
 
 	// Initialize the services
-	userService := service.NewUserService(userRepository)
+	userService := service.NewUserService(userRepository, addressRepository)
 	addressService := service.NewAddressService(addressRepository)
 
 	// Initialize the controllers

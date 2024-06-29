@@ -25,8 +25,8 @@ type UserResponse struct {
 }
 
 type RegisterRequest struct {
-	User    UserRequest    `json:"user"`
-	Address AddressRequest `json:"address"`
+	User    UserRequest          `json:"user"`
+	Address AddressCreateRequest `json:"address"`
 }
 
 type RegisterResponse struct {

@@ -34,7 +34,7 @@ func (ctrl *userController) Register(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(utils.BuildResponseFailed("Invalid request body", err.Error(), nil))
 	}
 
-	response, err := ctrl.service.Register(registerRequest.User)
+	response, err := ctrl.service.Register(registerRequest)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(utils.BuildResponseFailed("Failed to register new user", err.Error(), nil))
 	}
