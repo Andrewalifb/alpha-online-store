@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/Andrewalifb/alpha-online-store/user-services/dto"
 	"github.com/Andrewalifb/alpha-online-store/user-services/entity"
@@ -28,6 +29,10 @@ func NewUserService(userRepo repository.UserRepository, addressRepo repository.A
 
 func (s *userService) Register(user dto.RegisterRequest) (*dto.RegisterResponse, error) {
 	hashedPassword := utils.HashPassword(user.User.Password)
+
+	if !utils.IsValidEmail(user.User.Email) {
+		return nil, errors.New(fmt.Sprintf("email %s is not valid", user.User.Email))
+	}
 
 	userEntity := entity.User{
 		Username:       user.User.Username,
@@ -105,7 +110,7 @@ func (s *userService) Login(username, password string) (*dto.LoginResponse, erro
 		return nil, errors.New("invalid password")
 	}
 
-	token := utils.GenerateJWT(user.Username)
+	token := utils.GenerateJWT(user.Username, user.Role)
 
 	return &dto.LoginResponse{
 		Token: token,
