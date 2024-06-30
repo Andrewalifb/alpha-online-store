@@ -1,0 +1,290 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Cart Service API"
+  description: "API documentation for the Cart Service"
+servers:
+  - url: "http://localhost:8083/api/v1"
+paths:
+  /cart:
+    post:
+      summary: "Create a new cart"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddToCartRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddToCartResponse"
+  /cart/{userID}:
+    get:
+      summary: "Get all carts by user ID"
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GetAllCartByUserIdResponse"
+  /cart/{cartID}:
+    delete:
+      summary: "Delete a cart by ID"
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RemoveCartResponse"
+    put:
+      summary: "Update a cart by ID"
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateCartRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateCartResponse"
+  /cart/checkout:
+    post:
+      summary: "Checkout multiple carts"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CheckoutRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckoutResponse"
+  /carts/user/{userID}:
+    delete:
+      summary: "Delete all carts by user ID"
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+  /cartItem/{cartID}:
+    post:
+      summary: "Create a new cart item"
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartItemRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItemResponse"
+    get:
+      summary: "Get all cart items by cart ID"
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItemResponse"
+    put:
+      summary: "Update a cart item"
+      parameters:
+        - name: cartID
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartItemRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItemResponse"
+  /cartItem/{cartItemID}:
+    delete:
+      summary: "Delete a cart item"
+      parameters:
+        - name: cartItemID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+components:
+  schemas:
+    AddToCartRequest:
+      type: object
+      properties:
+        UserID:
+          type: integer
+        CartItem:
+          $ref: "#/components/schemas/CartItemRequest"
+    AddToCartResponse:
+      type: object
+      properties:
+        CartID:
+          type: integer
+        CartItem:
+          $ref: "#/components/schemas/CartItemResponse"
+    GetAllCartByUserIdRequest:
+      type: object
+      properties:
+        UserID:
+          type: integer
+    GetAllCartByUserIdResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        UserID:
+          type: integer
+        CartItems:
+          type: array
+          items:
+            $ref: "#/components/schemas/CartItemResponse"
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+    CheckoutRequest:
+      type: object
+      properties:
+        UserId:
+          type: integer
+        CartIDs:
+          type: array
+          items:
+            type: integer
+    CheckoutResponse:
+      type: object
+      properties:
+        Carts:
+          type: array
+          items:
+            type: object
+            properties:
+              CartID:
+                type: integer
+              CartItems:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CartItemResponse"
+    UpdateCartRequest:
+      type: object
+      properties:
+        CartID:
+          type: integer
+        CartItem:
+          $ref: "#/components/schemas/CartItemRequest"
+    UpdateCartResponse:
+      type: object
+      properties:
+        CartID:
+          type: integer
+        CartItem:
+          $ref: "#/components/schemas/CartItemResponse"
+    RemoveCartRequest:
+      type: object
+      properties:
+        CartID:
+          type: integer
+    RemoveCartResponse:
+      type: object
+      properties:
+        RemovedCartID:
+          type: integer
+    CartItemRequest:
+      type: object
+      properties:
+        ProductID:
+          type: integer
+        Quantity:
+          type: integer
+        Price:
+          type: number
+          format: float
+    CartItemResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        CartID:
+          type: integer
+        ProductID:
+          type: integer
+        Quantity:
+          type: integer
+        Price:
+          type: number
+          format: float
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time

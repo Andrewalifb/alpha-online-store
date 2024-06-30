@@ -1,0 +1,259 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Order Service API"
+  description: "API documentation for the Order Service"
+servers:
+  - url: "http://localhost:8084/api/v1"
+paths:
+  /payment-methods:
+    post:
+      summary: "Create a new payment method"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatePaymentMethodRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatePaymentMethodResponse"
+    get:
+      summary: "Get all payment methods"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadAllPaymentMethodsResponse"
+  /payment-method/{id}:
+    get:
+      summary: "Get a payment method by ID"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadPaymentMethodResponse"
+  /transactions:
+    post:
+      summary: "Create a new transaction"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTransactionsRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateTransactionsResponse"
+  /transactions/{id}:
+    get:
+      summary: "Get a transaction by ID"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionResponse"
+  /users/{userID}/transactions:
+    get:
+      summary: "Get all transactions by user ID"
+      parameters:
+        - name: userID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadTransactionsByUserIDResponse"
+  /transactions/status:
+    put:
+      summary: "Update transaction status"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionPaymentRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TransactionPaymentResponse"
+components:
+  schemas:
+    CreatePaymentMethodRequest:
+      type: object
+      properties:
+        Method:
+          type: string
+    CreatePaymentMethodResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        Method:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+    ReadAllPaymentMethodsResponse:
+      type: object
+      properties:
+        PaymentMethods:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreatePaymentMethodResponse"
+    ReadPaymentMethodResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        Method:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+    TransactionItemRequest:
+      type: object
+      properties:
+        ProductID:
+          type: integer
+        Quantity:
+          type: integer
+        Price:
+          type: number
+          format: float
+    TransactionRequest:
+      type: object
+      properties:
+        UserID:
+          type: integer
+        Address:
+          type: string
+        Total:
+          type: number
+          format: float
+        TransactionItem:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionItemRequest"
+    CreateTransactionsRequest:
+      type: object
+      properties:
+        Transactions:
+          $ref: "#/components/schemas/TransactionRequest"
+    TransactionItemResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        ProductID:
+          type: integer
+        Quantity:
+          type: integer
+        Price:
+          type: number
+          format: float
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+    TransactionResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        UserID:
+          type: integer
+        PaymentMethodID:
+          type: integer
+        Address:
+          type: string
+        TransactionItem:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionItemResponse"
+        Total:
+          type: number
+          format: float
+        Status:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+    CreateTransactionsResponse:
+      type: object
+      properties:
+        Transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionResponse"
+    TransactionPaymentRequest:
+      type: object
+      properties:
+        TransactionID:
+          type: integer
+        PaymentMethod:
+          type: integer
+    TransactionPaymentResponse:
+      type: object
+      properties:
+        Transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionResponse"
+    ReadTransactionsByUserIDRequest:
+      type: object
+      properties:
+        UserID:
+          type: integer
+    ReadTransactionsByUserIDResponse:
+      type: object
+      properties:
+        Transactions:
+          type: array
+          items:
+            $ref: "#/components/schemas/TransactionResponse"
