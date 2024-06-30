@@ -1,0 +1,20 @@
+version: '3'
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: alpha-online-store-product-services
+    ports:
+      - "8081:8081"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+
+
+
+# docker-compose build --no-cache
+# docker-compose up --build
+# docker-compose up
+# docker-compose down
