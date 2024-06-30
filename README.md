@@ -2,6 +2,14 @@
 
 Alpha Online Store is a simple online store built as a reference for implementing clean architecture using Golang, PostgreSQL, and Redis. It demonstrates how to structure an application using separate services, each with its own responsibilities.
 
+# Some basic features :
+• Customer can view product list by product category
+• Customer can add product to shopping cart
+• Customers can see a list of products that have been added to the shopping cart
+• Customer can delete product list in shopping cart
+• Customers can checkout and make payment transactions
+• Login and register customers
+
 ## Services
 
 The application is divided into several services:
@@ -47,6 +55,8 @@ Here are the endpoints for each service:
 | Transaction Service  | GET         | /api/v1/transactions/:id                   | Retrieve a transaction by ID             |
 | Transaction Service  | GET         | /api/v1/users/:userID/transactions         | Retrieve transactions by user ID         |
 | Transaction Service  | PUT         | /api/v1/transactions/status                | Update transaction status               |
+
+for more detailed each rest api end point request and response, i have added on each services open api documentations.
 
 ## Database Schema
 
