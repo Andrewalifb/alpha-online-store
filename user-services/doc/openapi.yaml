@@ -1,0 +1,253 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "User Service API"
+  description: "API documentation for the User Service"
+servers:
+  - url: "http://localhost:8080/api/v1"
+paths:
+  /register:
+    post:
+      summary: "Register a new user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponse"
+  /login:
+    post:
+      summary: "Login a user"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+  /address:
+    post:
+      summary: "Create a new address"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAddressRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateAddressResponse"
+  /address/{id}:
+    get:
+      summary: "Get an address by ID"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadAddressResponse"
+    put:
+      summary: "Update an address by ID"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateAddressRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateAddressResponse"
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        User:
+          $ref: "#/components/schemas/UserRequest"
+        Address:
+          $ref: "#/components/schemas/AddressCreateRequest"
+    RegisterResponse:
+      type: object
+      properties:
+        User:
+          $ref: "#/components/schemas/UserResponse"
+        Address:
+          $ref: "#/components/schemas/AddressResponse"
+    LoginRequest:
+      type: object
+      properties:
+        Username:
+          type: string
+        Password:
+          type: string
+    LoginResponse:
+      type: object
+      properties:
+        Token:
+          type: string
+    CreateAddressRequest:
+      type: object
+      properties:
+        Address:
+          $ref: "#/components/schemas/AddressCreateRequest"
+    CreateAddressResponse:
+      type: object
+      properties:
+        Address:
+          $ref: "#/components/schemas/AddressResponse"
+    ReadAddressResponse:
+      type: object
+      properties:
+        Address:
+          $ref: "#/components/schemas/AddressResponse"
+    UpdateAddressRequest:
+      type: object
+      properties:
+        Address:
+          $ref: "#/components/schemas/AddressUpdateRequest"
+    UpdateAddressResponse:
+      type: object
+      properties:
+        Address:
+          $ref: "#/components/schemas/AddressResponse"
+    UserRequest:
+      type: object
+      properties:
+        Username:
+          type: string
+        Password:
+          type: string
+        Email:
+          type: string
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        PhoneNumber:
+          type: string
+        Role:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        Username:
+          type: string
+        Email:
+          type: string
+        FirstName:
+          type: string
+        LastName:
+          type: string
+        PhoneNumber:
+          type: string
+        Role:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+    AddressCreateRequest:
+      type: object
+      properties:
+        UserID:
+          type: integer
+        Street:
+          type: string
+        SubDistrict:
+          type: string
+        District:
+          type: string
+        CityOrRegency:
+          type: string
+        Province:
+          type: string
+        Country:
+          type: string
+        PostalCode:
+          type: string
+    AddressUpdateRequest:
+      type: object
+      properties:
+        Street:
+          type: string
+        SubDistrict:
+          type: string
+        District:
+          type: string
+        CityOrRegency:
+          type: string
+        Province:
+          type: string
+        Country:
+          type: string
+        PostalCode:
+          type: string
+        IsDefault:
+          type: boolean
+    AddressResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        UserID:
+          type: integer
+        Street:
+          type: string
+        SubDistrict:
+          type: string
+        District:
+          type: string
+        CityOrRegency:
+          type: string
+        Province:
+          type: string
+        Country:
+          type: string
+        PostalCode:
+          type: string
+        IsDefault:
+          type: boolean
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time

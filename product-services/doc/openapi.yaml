@@ -1,0 +1,262 @@
+openapi: "3.0.0"
+info:
+  version: "1.0.0"
+  title: "Product Service API"
+  description: "API documentation for the Product Service"
+servers:
+  - url: "http://localhost:8081/api/v1"
+paths:
+  /categories:
+    post:
+      summary: "Create a new category"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCategoryRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCategoryResponse"
+    get:
+      summary: "Get all categories"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadAllCategoriesResponse"
+  /categories/{id}:
+    get:
+      summary: "Get a category by ID"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCategoryResponse"
+  /products:
+    post:
+      summary: "Create a new product"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProductRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateProductResponse"
+    get:
+      summary: "Get all products"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadAllProductsResponse"
+  /products/{id}:
+    get:
+      summary: "Get a product by ID"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadProductByIDResponse"
+    put:
+      summary: "Update a product by ID"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProductRequest"
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateProductResponse"
+  /categories/{categoryID}/products:
+    get:
+      summary: "Get products by category ID"
+      parameters:
+        - name: categoryID
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successful operation"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReadProductsByCategoryIDResponse"
+components:
+  schemas:
+    CreateCategoryRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+        Description:
+          type: string
+    CreateCategoryResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        Name:
+          type: string
+        Description:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+    ReadAllCategoriesResponse:
+      type: object
+      properties:
+        Categories:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateCategoryResponse"
+    CreateProductRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+        Description:
+          type: string
+        Price:
+          type: number
+          format: float
+        Inventory:
+          type: integer
+        ImageURL:
+          type: string
+        CategoryID:
+          type: integer
+        Status:
+          type: string
+    CreateProductResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        Name:
+          type: string
+        Description:
+          type: string
+        Price:
+          type: number
+          format: float
+        Inventory:
+          type: integer
+        ImageURL:
+          type: string
+        Category:
+          $ref: "#/components/schemas/CreateCategoryResponse"
+        Status:
+          type: string
+        CreatedAt:
+          type: string
+          format: date-time
+        UpdatedAt:
+          type: string
+          format: date-time
+    ReadProductByIDResponse:
+      type: object
+      properties:
+        Product:
+          $ref: "#/components/schemas/CreateProductResponse"
+    ReadAllProductsResponse:
+      type: object
+      properties:
+        Products:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateProductResponse"
+    ReadProductsByCategoryIDResponse:
+      type: object
+      properties:
+        Products:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateProductResponse"
+    UpdateProductRequest:
+      type: object
+      properties:
+        Name:
+          type: string
+        Description:
+          type: string
+        Price:
+          type: number
+          format: float
+        Inventory:
+          type: integer
+        ImageURL:
+          type: string
+        CategoryID:
+          type: integer
+        Status:
+          type: string
+    UpdateProductResponse:
+      type: object
+      properties:
+        ID:
+          type: integer
+        Name:
+          type: string
+        Description:
+          type: string
+        Price:
+          type: number
+          format: float
+        Inventory:
+          type: integer
+        ImageURL:
+          type: string
+        Category:
+          $ref: "#/components/schemas/CreateCategoryResponse"
+        Status:
+          type: string
+        UpdatedAt:
+          type: string
+          format: date-time
